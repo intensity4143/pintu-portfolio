@@ -41,7 +41,7 @@ I specialize in building scalable full-stack applications using the **MERN stack
 
 ```bash
 portfolio/
-├── assets/              # README preview image
+├── assets/          
 ├── public/
 ├── src/
 │   ├── components/
