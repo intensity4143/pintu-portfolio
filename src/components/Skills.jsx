@@ -90,7 +90,7 @@ const Skills = () => {
 
   return (
     <section id="skills">
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-6xl mx-auto px-3 md:px-6">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}

@@ -23,7 +23,7 @@ const Hero = () => {
 
   return (
     <section id="home" className="min-h-screen flex items-center pt-20">
-      <div className="max-w-7xl mx-auto px-6 w-full">
+      <div className="max-w-7xl mx-auto px-3 md:px-6 w-full">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           {/* Left Side - Content */}
           <motion.div

@@ -8,12 +8,12 @@ const Footer = () => {
     { icon: FiGithub, url: 'https://github.com/intensity4143', name: 'GitHub' },
     { icon: FiLinkedin, url: 'https://linkedin.com/in/intensity4143', name: 'LinkedIn' },
     { icon: SiLeetcode, url: 'https://leetcode.com/intensity4143', name: 'LeetCode' },
-    { icon: FiMail, url: 'mailto:pintu.kumar@example.com', name: 'Email' },
+    { icon: FiMail, url: 'https://mail.google.com/mail/?view=cm&fs=1&to=ipintu4143@gmail.com', name: 'Email' },
   ];
 
   return (
     <footer className="bg-dark-secondary border-t border-gray-800 py-8">
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-3 md:px-6">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           
           {/* Copyright */}

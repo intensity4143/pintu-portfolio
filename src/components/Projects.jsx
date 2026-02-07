@@ -63,14 +63,15 @@ const Projects = () => {
         "Optimized API calls with caching strategy",
       ],
       techStack: ["React", "Google Maps API", "Weather API", "Tailwind CSS"],
-      github: "https://github.com/intensity4143/weather-app-built-using-HTML-CSS-and-JS",
+      github:
+        "https://github.com/intensity4143/weather-app-built-using-HTML-CSS-and-JS",
       demo: "https://intensity4143.github.io/weather-app-built-using-HTML-CSS-and-JS/",
     },
   ];
 
   return (
     <section id="projects" className="bg-dark-secondary/50 py-20">
-      <div className="max-w-6xl mx-auto px-6">
+      <div className="max-w-6xl mx-auto px-3 md:px-6">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -127,12 +128,12 @@ const Projects = () => {
                 </div>
 
                 {/* Links */}
-                <div className="flex gap-4">
+                <div className="flex flex-col sm:flex-row gap-4">
                   <a
                     href={project.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn-outline flex items-center gap-2"
+                    className="btn-outline w-full sm:w-auto flex items-center justify-center gap-2"
                   >
                     <FiGithub />
                     View Code
@@ -142,7 +143,7 @@ const Projects = () => {
                     href={project.demo}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn-primary flex items-center gap-2"
+                    className="btn-primary w-full sm:w-auto flex items-center justify-center gap-2"
                   >
                     <FiExternalLink />
                     Live Demo
