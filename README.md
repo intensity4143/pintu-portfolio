@@ -3,7 +3,7 @@
 ![Portfolio Preview](./assets/preview.png)
 
 🔗 **Live Website:**  
-https://pintu-portfolio-xi.vercel.app/
+👉 https://pintu-portfolio-xi.vercel.app/
 
 ---
 
@@ -11,7 +11,7 @@ https://pintu-portfolio-xi.vercel.app/
 
 This is my personal developer portfolio built to showcase my projects, technical skills, and problem-solving experience.
 
-I specialize in building scalable full-stack applications using the MERN stack, with a strong foundation in Data Structures & Algorithms.
+I specialize in building scalable full-stack applications using the **MERN stack**, with a strong foundation in **Data Structures & Algorithms**.
 
 ---
 
@@ -28,29 +28,31 @@ I specialize in building scalable full-stack applications using the MERN stack, 
 
 ## ✨ Features
 
-- Modern dark-themed UI
-- Smooth animations and transitions
-- Project showcase with GitHub links
-- Resume download functionality
-- Clean and modular code structure
-- Optimized performance build
+- Modern dark-themed UI  
+- Smooth animations and transitions  
+- Project showcase with GitHub links  
+- Resume download functionality  
+- Clean and modular code structure  
+- Optimized production build  
 
 ---
 
 ## 📁 Project Structure
 
+```bash
 portfolio/
-├── assets/ # README preview image
+├── assets/              # README preview image
 ├── public/
 ├── src/
-│ ├── components/
-│ ├── assets/
-│ └── ...
+│   ├── components/
+│   ├── assets/
+│   ├── App.jsx
+│   └── main.jsx
+├── index.html
 ├── package.json
-└── vite.config.js
-
-
----
+├── vite.config.js
+└── tailwind.config.js
+```
 
 ## 🚀 Deployment
 
