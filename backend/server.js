@@ -7,8 +7,19 @@ const cors = require('cors');
 const app = express();
 
 // CORS
+const allowedOrigins = [
+  'https://pintu-portfolio-xi.vercel.app',
+  'http://localhost:3000',
+];
+
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:3000',
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
 }));
 
