@@ -15,11 +15,15 @@ const SOCIAL_MAP = [
 const Hero = () => {
   const [profile,   setProfile]   = useState(null);
   const [resumeUrl, setResumeUrl] = useState('/Pintu_Kumar_Resume.pdf');
+  const [colored,   setColored]   = useState(false);
+  // Detect touch/no-hover device once on mount
+  const [isTouch,   setIsTouch]   = useState(false);
 
-  const refText  = useFadeUp(0);
-  const refImg   = useFadeUp(100);
+  const refText = useFadeUp(0);
+  const refImg  = useFadeUp(100);
 
   useEffect(() => {
+    setIsTouch(window.matchMedia('(hover: none)').matches);
     api.get('/api/profile').then(r => setProfile(r.data)).catch(() => {});
     api.get('/api/resume').then(r => { if (r.data.resumeUrl) setResumeUrl(r.data.resumeUrl); }).catch(() => {});
   }, []);
@@ -90,15 +94,43 @@ const Hero = () => {
 
           {/* Right: portrait — 3:4 ratio */}
           <div ref={refImg} className="fade-up flex-shrink-0 flex md:justify-end">
-            <div
-              className="overflow-hidden border border-border"
-              style={{ width: '168px', aspectRatio: '3/4' }}
-            >
-              <img
-                src={profileImage}
-                alt={name}
-                className="w-full h-full object-cover object-top grayscale hover:grayscale-0 transition-all duration-500"
-              />
+            <div className="relative" style={{ width: '196px' }}>
+              <div
+                className="overflow-hidden border border-border"
+                style={{ width: '196px', aspectRatio: '3/4' }}
+              >
+                {isTouch ? (
+                  <img
+                    src={profileImage}
+                    alt={name}
+                    className="w-full h-full object-cover object-top transition-all duration-500"
+                    style={{ filter: colored ? 'grayscale(0%)' : 'grayscale(100%)' }}
+                  />
+                ) : (
+                  <img
+                    src={profileImage}
+                    alt={name}
+                    className="w-full h-full object-cover object-top grayscale hover:grayscale-0 transition-all duration-500"
+                  />
+                )}
+              </div>
+
+              {/* Mobile-only toggle button */}
+              {isTouch && (
+                <button
+                  onClick={() => setColored(v => !v)}
+                  aria-label={colored ? 'Switch to grayscale' : 'Switch to color'}
+                  title={colored ? 'Switch to grayscale' : 'Switch to color'}
+                  className="absolute -bottom-3 -right-3 w-8 h-8 rounded-full border border-border bg-surface-2 flex items-center justify-center"
+                  style={{ touchAction: 'manipulation' }}
+                >
+                  {/* Half-circle icon: left gray, right colored */}
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M8 2a6 6 0 1 0 0 12A6 6 0 0 0 8 2z" fill="#555" />
+                    <path d="M8 2a6 6 0 0 1 0 12V2z" fill={colored ? '#E8C547' : '#888'} />
+                  </svg>
+                </button>
+              )}
             </div>
           </div>
         </div>
