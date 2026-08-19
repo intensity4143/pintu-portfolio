@@ -3,7 +3,6 @@ import { FiArrowRight, FiDownload, FiGithub, FiLinkedin } from 'react-icons/fi';
 import { SiLeetcode, SiCodeforces } from 'react-icons/si';
 import profileImgFallback from '../assets/profile.jpg';
 import api from '../api/axios';
-import useFadeUp from '../hooks/useFadeUp';
 
 const SOCIAL_MAP = [
   { key: 'github',    Icon: FiGithub,    label: 'GitHub' },
@@ -14,18 +13,22 @@ const SOCIAL_MAP = [
 
 const Hero = () => {
   const [profile,   setProfile]   = useState(null);
+  const [loading,   setLoading]   = useState(true);
   const [resumeUrl, setResumeUrl] = useState('/Pintu_Kumar_Resume.pdf');
   const [colored,   setColored]   = useState(false);
-  // Detect touch/no-hover device once on mount
   const [isTouch,   setIsTouch]   = useState(false);
 
-  const refText = useFadeUp(0);
-  const refImg  = useFadeUp(100);
+
 
   useEffect(() => {
     setIsTouch(window.matchMedia('(hover: none)').matches);
-    api.get('/api/profile').then(r => setProfile(r.data)).catch(() => {});
-    api.get('/api/resume').then(r => { if (r.data.resumeUrl) setResumeUrl(r.data.resumeUrl); }).catch(() => {});
+    Promise.all([api.get('/api/profile'), api.get('/api/resume')])
+      .then(([p, r]) => {
+        setProfile(p.data);
+        if (r.data.resumeUrl) setResumeUrl(r.data.resumeUrl);
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
 
   const name         = profile?.name         || 'Pintu Kumar';
@@ -34,6 +37,32 @@ const Hero = () => {
   const profileImage = profile?.profileImage || profileImgFallback;
   const socialLinks  = profile?.socialLinks  || {};
 
+  if (loading) return (
+    <section id="home" className="min-h-screen flex flex-col justify-center pt-16">
+      <div className="max-w-5xl mx-auto px-6 w-full pt-10 pb-16 md:pt-12 md:pb-20">
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-12 md:gap-8">
+          <div className="flex-1 max-w-2xl space-y-5">
+            <div className="skeleton h-3 w-48" />
+            <div className="skeleton h-14 w-3/4" />
+            <div className="skeleton h-5 w-2/3" />
+            <div className="space-y-2">
+              <div className="skeleton h-3.5 w-full" />
+              <div className="skeleton h-3.5 w-full" />
+              <div className="skeleton h-3.5 w-4/5" />
+            </div>
+            <div className="flex gap-3 pt-2">
+              <div className="skeleton h-10 w-32" />
+              <div className="skeleton h-10 w-36" />
+            </div>
+          </div>
+          <div className="flex-shrink-0">
+            <div className="skeleton" style={{ width: '196px', aspectRatio: '3/4' }} />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+
   return (
     <section id="home" className="min-h-screen flex flex-col justify-center pt-16">
       <div className="max-w-5xl mx-auto px-6 w-full pt-10 pb-16 md:pt-12 md:pb-20">
@@ -41,7 +70,7 @@ const Hero = () => {
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-12 md:gap-8">
 
           {/* Left: text */}
-          <div ref={refText} className="fade-up flex-1 max-w-2xl">
+          <div className="flex-1 max-w-2xl">
             <p className="font-mono text-xs text-text-muted tracking-widest uppercase mb-6">
               Based in India · Open to opportunities
             </p>
@@ -93,7 +122,7 @@ const Hero = () => {
           </div>
 
           {/* Right: portrait — 3:4 ratio */}
-          <div ref={refImg} className="fade-up flex-shrink-0 flex md:justify-end">
+          <div className="flex-shrink-0 flex md:justify-end">
             <div className="relative" style={{ width: '196px' }}>
               <div
                 className="overflow-hidden border border-border"

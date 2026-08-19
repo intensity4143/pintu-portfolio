@@ -115,7 +115,21 @@ const Projects = () => {
         </div>
 
         {loading ? (
-          <p className="text-sm text-text-muted">Loading projects…</p>
+          <div className="space-y-0">
+            {[0,1,2].map(i => (
+              <div key={i} className="border-t border-border py-10 space-y-4">
+                <div className="flex items-baseline gap-4">
+                  <div className="skeleton h-3 w-6" />
+                  <div className="skeleton h-5 w-48" />
+                </div>
+                <div className="pl-8 space-y-2">
+                  <div className="skeleton h-3.5 w-full" />
+                  <div className="skeleton h-3.5 w-5/6" />
+                  <div className="skeleton h-3.5 w-4/5" />
+                </div>
+              </div>
+            ))}
+          </div>
         ) : projects.length === 0 ? (
           <p className="text-sm text-text-muted">No projects yet.</p>
         ) : (

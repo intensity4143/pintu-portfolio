@@ -55,7 +55,14 @@ const Skills = () => {
         </div>
 
         {loading ? (
-          <p className="text-sm text-text-muted">Loading…</p>
+          <div>
+            {[0,1,2,3,4].map(i => (
+              <div key={i} className="grid md:grid-cols-4 gap-4 md:gap-8 border-t border-border py-6">
+                <div className="skeleton h-3 w-20" />
+                <div className="md:col-span-3 skeleton h-3.5 w-3/4" />
+              </div>
+            ))}
+          </div>
         ) : (
           <div>
             {allGroups.map((group, i) => (

@@ -14,6 +14,7 @@ const LINKS_MAP = [
 
 const Contact = () => {
   const [profile,   setProfile]   = useState(null);
+  const [loading,   setLoading]   = useState(true);
   const [form,      setForm]      = useState({ name: '', email: '', message: '' });
   const [errors,    setErrors]    = useState({});
   const [submitted, setSubmitted] = useState(false);
@@ -23,7 +24,10 @@ const Contact = () => {
   const refRight = useFadeUp(160);
 
   useEffect(() => {
-    api.get('/api/profile').then(r => setProfile(r.data)).catch(() => {});
+    api.get('/api/profile')
+      .then(r => setProfile(r.data))
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
 
   const email       = profile?.email       || 'ipintu4143@gmail.com';
@@ -76,28 +80,40 @@ const Contact = () => {
               Open to full-time roles, freelance projects, and interesting collaborations.
             </p>
             <div className="space-y-0">
-              {contactLinks.map(({ key, Icon, label, href, display }) => (
-                <a
-                  key={key}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-between group border-b border-border py-4 last:border-b-0"
-                >
-                  <div className="flex items-center gap-3">
-                    <Icon size={14} className="text-text-muted" />
-                    <span className="text-sm text-text-secondary group-hover:text-text-primary transition-colors">
-                      {label}
-                    </span>
+              {loading ? (
+                [0,1,2,3].map(i => (
+                  <div key={i} className="flex items-center justify-between border-b border-border py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="skeleton h-3.5 w-3.5 rounded-sm" />
+                      <div className="skeleton h-3.5 w-20" />
+                    </div>
+                    <div className="skeleton h-3 w-32" />
                   </div>
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-xs text-text-muted font-mono hidden sm:block truncate max-w-[180px]">
-                      {display}
-                    </span>
-                    <FiArrowUpRight size={13} className="text-text-muted group-hover:text-accent transition-colors flex-shrink-0" />
-                  </div>
-                </a>
-              ))}
+                ))
+              ) : (
+                contactLinks.map(({ key, Icon, label, href, display }) => (
+                  <a
+                    key={key}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-between group border-b border-border py-4 last:border-b-0"
+                  >
+                    <div className="flex items-center gap-3">
+                      <Icon size={14} className="text-text-muted" />
+                      <span className="text-sm text-text-secondary group-hover:text-text-primary transition-colors">
+                        {label}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-xs text-text-muted font-mono hidden sm:block truncate max-w-[180px]">
+                        {display}
+                      </span>
+                      <FiArrowUpRight size={13} className="text-text-muted group-hover:text-accent transition-colors flex-shrink-0" />
+                    </div>
+                  </a>
+                ))
+              )}
             </div>
           </div>
 

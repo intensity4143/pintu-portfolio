@@ -55,7 +55,20 @@ const Achievements = () => {
         </div>
 
         {loading ? (
-          <p className="text-sm text-text-muted">Loading…</p>
+          <div>
+            {[0,1,2].map(i => (
+              <div key={i} className="border-t border-border py-6">
+                <div className="grid md:grid-cols-4 gap-4 md:gap-8">
+                  <div className="skeleton h-3 w-16" />
+                  <div className="md:col-span-3 space-y-2">
+                    <div className="skeleton h-4 w-48" />
+                    <div className="skeleton h-3.5 w-full" />
+                    <div className="skeleton h-3.5 w-4/5" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         ) : (
           <>
             {achievements.length > 0 && (

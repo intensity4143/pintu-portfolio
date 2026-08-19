@@ -85,6 +85,25 @@
   transform: translateY(0);
 }
 
+/* Skeleton loader */
+.skeleton {
+  background: #262626;
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+}
+.skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, #2e2e2e 50%, transparent 100%);
+  animation: shimmer 1.4s infinite;
+}
+@keyframes shimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
 /* Active nav link */
 .nav-link-active {
   color: #F0F0F0 !important;

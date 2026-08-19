@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import api from '../api/axios';
-import useFadeUp from '../hooks/useFadeUp';
 
 const About = () => {
   const [profile, setProfile] = useState(null);
-  const ref = useFadeUp(0);
-
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    api.get('/api/profile').then(r => setProfile(r.data)).catch(() => {});
+    api.get('/api/profile')
+      .then(r => setProfile(r.data))
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
 
   const paragraphs = profile?.about?.paragraphs || [
@@ -23,29 +24,46 @@ const About = () => {
       <div className="section-wrap">
         <p className="section-label">About</p>
 
-        <div className="grid md:grid-cols-3 gap-12 md:gap-16">
-          <div ref={ref} className="fade-up md:col-span-2 space-y-5">
-            {paragraphs.map((p, i) => (
-              <p key={i} className="text-text-secondary leading-relaxed" style={{ fontSize: '0.9375rem', lineHeight: '1.8' }}>
-                {p}
-              </p>
-            ))}
-          </div>
-
-          {currentFocus.length > 0 && (
-            <div>
-              <p className="font-mono text-xs text-text-muted uppercase tracking-widest mb-4">Current Focus</p>
-              <ul className="space-y-2">
-                {currentFocus.map((item, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-text-secondary">
-                    <span className="text-accent mt-1.5 flex-shrink-0 leading-none">—</span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
+        {loading ? (
+          <div className="grid md:grid-cols-3 gap-12 md:gap-16">
+            <div className="md:col-span-2 space-y-3">
+              <div className="skeleton h-3.5 w-full" />
+              <div className="skeleton h-3.5 w-full" />
+              <div className="skeleton h-3.5 w-5/6" />
+              <div className="skeleton h-3.5 w-full mt-4" />
+              <div className="skeleton h-3.5 w-full" />
+              <div className="skeleton h-3.5 w-4/5" />
             </div>
-          )}
-        </div>
+            <div className="space-y-3">
+              <div className="skeleton h-3 w-24 mb-4" />
+              {[1,2,3].map(i => <div key={i} className="skeleton h-3.5 w-full" />)}
+            </div>
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-3 gap-12 md:gap-16">
+            <div className="md:col-span-2 space-y-5">
+              {paragraphs.map((p, i) => (
+                <p key={i} className="text-text-secondary leading-relaxed" style={{ fontSize: '0.9375rem', lineHeight: '1.8' }}>
+                  {p}
+                </p>
+              ))}
+            </div>
+
+            {currentFocus.length > 0 && (
+              <div>
+                <p className="font-mono text-xs text-text-muted uppercase tracking-widest mb-4">Current Focus</p>
+                <ul className="space-y-2">
+                  {currentFocus.map((item, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm text-text-secondary">
+                      <span className="text-accent mt-1.5 flex-shrink-0 leading-none">—</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </section>
   );
