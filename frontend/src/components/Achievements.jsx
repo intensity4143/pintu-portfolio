@@ -37,8 +37,7 @@ const Achievements = () => {
   const [achievements, setAchievements] = useState([]);
   const [profile, setProfile]           = useState(null);
   const [loading, setLoading]           = useState(true);
-  const refHead     = useFadeUp(0);
-  const refPlatform = useFadeUp(100);
+  const refHead = useFadeUp(0);
 
   useEffect(() => {
     Promise.all([api.get('/api/achievements'), api.get('/api/profile')])
@@ -68,7 +67,7 @@ const Achievements = () => {
             )}
 
             {profile?.socialLinks && PLATFORMS.filter(pl => profile.socialLinks[pl.key]).length > 0 && (
-              <div ref={refPlatform} className="fade-up border-t border-border pt-8">
+              <div className="border-t border-border pt-8">
                 <p className="font-mono text-xs text-text-muted uppercase tracking-wider mb-6">
                   Competitive Programming
                 </p>
@@ -81,8 +80,8 @@ const Achievements = () => {
                       rel="noopener noreferrer"
                       className="flex items-center gap-2 group"
                     >
-                      <Icon size={15} className="text-text-secondary group-hover:text-accent transition-colors duration-150" />
-                      <span className="text-sm text-text-secondary group-hover:text-text-primary transition-colors duration-150">{label}</span>
+                      <Icon size={15} className="text-[#aaaaaa] group-hover:text-accent transition-colors duration-150" />
+                      <span className="text-sm text-[#aaaaaa] group-hover:text-white transition-colors duration-150">{label}</span>
                     </a>
                   ))}
                 </div>
