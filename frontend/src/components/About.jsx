@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import api from '../api/axios';
+import useFadeUp from '../hooks/useFadeUp';
 
 const About = () => {
   const [profile, setProfile] = useState(null);
+  const ref = useFadeUp(0);
 
   useEffect(() => {
     api.get('/api/profile').then(r => setProfile(r.data)).catch(() => {});
@@ -21,10 +23,12 @@ const About = () => {
       <div className="section-wrap">
         <p className="section-label">About</p>
 
-        <div className="grid md:grid-cols-3 gap-12 md:gap-16">
+        <div ref={ref} className="fade-up grid md:grid-cols-3 gap-12 md:gap-16">
           <div className="md:col-span-2 space-y-5">
             {paragraphs.map((p, i) => (
-              <p key={i} className="text-text-secondary leading-relaxed text-[0.9375rem]">{p}</p>
+              <p key={i} className="text-text-secondary leading-relaxed" style={{ fontSize: '0.9375rem', lineHeight: '1.8' }}>
+                {p}
+              </p>
             ))}
           </div>
 
@@ -33,7 +37,7 @@ const About = () => {
               {stats.map((stat, i) => (
                 <div key={i} className="border-l-2 border-accent pl-4">
                   <p className="text-xl font-semibold text-text-primary">{stat.value}</p>
-                  <p className="text-xs text-text-secondary mt-0.5 font-mono">{stat.label}</p>
+                  <p className="text-xs text-text-muted mt-0.5 font-mono">{stat.label}</p>
                 </div>
               ))}
             </div>

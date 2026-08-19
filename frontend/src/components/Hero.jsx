@@ -3,43 +3,50 @@ import { FiArrowRight, FiDownload, FiGithub, FiLinkedin } from 'react-icons/fi';
 import { SiLeetcode, SiCodeforces } from 'react-icons/si';
 import profileImgFallback from '../assets/profile.jpg';
 import api from '../api/axios';
+import useFadeUp from '../hooks/useFadeUp';
 
 const SOCIAL_MAP = [
-  { key: 'github', Icon: FiGithub, label: 'GitHub' },
-  { key: 'linkedin', Icon: FiLinkedin, label: 'LinkedIn' },
-  { key: 'leetcode', Icon: SiLeetcode, label: 'LeetCode' },
-  { key: 'codeforces', Icon: SiCodeforces, label: 'Codeforces' },
+  { key: 'github',    Icon: FiGithub,    label: 'GitHub' },
+  { key: 'linkedin',  Icon: FiLinkedin,  label: 'LinkedIn' },
+  { key: 'leetcode',  Icon: SiLeetcode,  label: 'LeetCode' },
+  { key: 'codeforces',Icon: SiCodeforces,label: 'Codeforces' },
 ];
 
 const Hero = () => {
-  const [profile, setProfile] = useState(null);
+  const [profile,   setProfile]   = useState(null);
   const [resumeUrl, setResumeUrl] = useState('/Pintu_Kumar_Resume.pdf');
+
+  const refText  = useFadeUp(0);
+  const refImg   = useFadeUp(100);
+  const refStats = useFadeUp(200);
 
   useEffect(() => {
     api.get('/api/profile').then(r => setProfile(r.data)).catch(() => {});
     api.get('/api/resume').then(r => { if (r.data.resumeUrl) setResumeUrl(r.data.resumeUrl); }).catch(() => {});
   }, []);
 
-  const name = profile?.name || 'Pintu Kumar';
-  const title = profile?.title || 'Full Stack Developer · Backend-Focused · MERN Stack';
-  const intro = profile?.intro || 'Full Stack Developer with strong backend expertise in building scalable web applications, RESTful APIs, authentication systems, and payment integrations. Solved 1,200+ DSA problems with strong foundations in DBMS, OOP, OS, Computer Networks, and System Design.';
+  const name         = profile?.name         || 'Pintu Kumar';
+  const title        = profile?.title        || 'Full Stack Developer · Backend-Focused · MERN Stack';
+  const intro        = profile?.intro        || 'Full Stack Developer with strong backend expertise in building scalable web applications, RESTful APIs, authentication systems, and payment integrations. Solved 1,200+ DSA problems with strong foundations in DBMS, OOP, OS, Computer Networks, and System Design.';
   const profileImage = profile?.profileImage || profileImgFallback;
-  const socialLinks = profile?.socialLinks || {};
+  const socialLinks  = profile?.socialLinks  || {};
 
   return (
     <section id="home" className="min-h-screen flex flex-col justify-center pt-16">
       <div className="max-w-5xl mx-auto px-6 w-full py-20 md:py-28">
 
-        {/* Main grid */}
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-12 md:gap-8">
 
           {/* Left: text */}
-          <div className="flex-1 max-w-2xl">
-            <p className="font-mono text-xs text-text-secondary tracking-widest uppercase mb-6">
-              Available for opportunities
+          <div ref={refText} className="fade-up flex-1 max-w-2xl">
+            <p className="font-mono text-xs text-text-muted tracking-widest uppercase mb-6">
+              Based in India · Open to opportunities
             </p>
 
-            <h1 className="text-display font-semibold text-text-primary mb-4">
+            <h1
+              className="font-semibold text-text-primary mb-4"
+              style={{ fontSize: 'clamp(2.4rem, 5vw, 3.75rem)', lineHeight: '1.05', letterSpacing: '-0.03em' }}
+            >
               {name}
             </h1>
 
@@ -47,7 +54,7 @@ const Hero = () => {
               {title}
             </p>
 
-            <p className="text-sm text-text-secondary leading-relaxed mb-10 max-w-xl">
+            <p className="text-sm text-text-secondary leading-relaxed mb-10 max-w-xl" style={{ lineHeight: '1.75' }}>
               {intro}
             </p>
 
@@ -66,7 +73,6 @@ const Hero = () => {
               </a>
             </div>
 
-            {/* Social links */}
             <div className="flex items-center gap-5">
               {SOCIAL_MAP.filter(s => socialLinks[s.key]).map(({ key, Icon, label }) => (
                 <a
@@ -83,31 +89,36 @@ const Hero = () => {
             </div>
           </div>
 
-          {/* Right: portrait */}
-          <div className="flex-shrink-0 flex md:justify-end">
-            <div className="w-40 h-40 md:w-52 md:h-52 overflow-hidden border border-border">
+          {/* Right: portrait — 3:4 ratio */}
+          <div ref={refImg} className="fade-up flex-shrink-0 flex md:justify-end">
+            <div
+              className="overflow-hidden border border-border"
+              style={{ width: '168px', aspectRatio: '3/4' }}
+            >
               <img
                 src={profileImage}
                 alt={name}
-                className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500"
+                className="w-full h-full object-cover object-top grayscale hover:grayscale-0 transition-all duration-500"
               />
             </div>
           </div>
         </div>
 
         {/* Stats row */}
-        <div className="mt-16 pt-8 border-t border-border grid grid-cols-3 gap-6 max-w-lg">
+        <div ref={refStats} className="fade-up mt-16 pt-8 border-t border-border flex flex-wrap gap-x-10 gap-y-6">
           <div>
-            <p className="text-2xl font-semibold text-text-primary">1,200+</p>
-            <p className="text-xs text-text-secondary mt-1 font-mono">DSA Problems</p>
+            <p className="text-2xl font-semibold text-text-primary" style={{ letterSpacing: '-0.02em' }}>1,200+</p>
+            <p className="text-xs text-text-muted mt-1 font-mono tracking-wide">DSA Problems Solved</p>
           </div>
+          <div className="w-px bg-border self-stretch hidden sm:block" />
           <div>
-            <p className="text-2xl font-semibold text-text-primary">1812</p>
-            <p className="text-xs text-text-secondary mt-1 font-mono">Peak LeetCode</p>
+            <p className="text-2xl font-semibold text-text-primary" style={{ letterSpacing: '-0.02em' }}>1812</p>
+            <p className="text-xs text-text-muted mt-1 font-mono tracking-wide">Peak LeetCode Rating</p>
           </div>
+          <div className="w-px bg-border self-stretch hidden sm:block" />
           <div>
-            <p className="text-2xl font-semibold text-accent">Backend</p>
-            <p className="text-xs text-text-secondary mt-1 font-mono">Focused</p>
+            <p className="text-2xl font-semibold text-accent" style={{ letterSpacing: '-0.02em' }}>MERN</p>
+            <p className="text-xs text-text-muted mt-1 font-mono tracking-wide">Backend-Focused Stack</p>
           </div>
         </div>
 
