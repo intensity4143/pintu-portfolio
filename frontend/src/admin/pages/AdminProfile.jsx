@@ -25,7 +25,8 @@ const AdminProfile = () => {
         siteTitle: p.siteTitle || '',
         siteDescription: p.siteDescription || '',
         aboutParagraphs: (p.about?.paragraphs || []).join('\n\n'),
-        stats: JSON.stringify(p.about?.stats || [], null, 2),
+        aboutStats: JSON.stringify(p.about?.stats || [], null, 2),
+        heroStats: JSON.stringify(p.heroStats || [], null, 2),
         github: p.socialLinks?.github || '',
         linkedin: p.socialLinks?.linkedin || '',
         leetcode: p.socialLinks?.leetcode || '',
@@ -41,8 +42,10 @@ const AdminProfile = () => {
     e.preventDefault();
     setSaving(true); setError(''); setSuccess('');
     try {
-      let statsArr = [];
-      try { statsArr = JSON.parse(form.stats); } catch { setError('Stats JSON is invalid'); setSaving(false); return; }
+      let aboutStatsArr = [];
+      let heroStatsArr = [];
+      try { aboutStatsArr = JSON.parse(form.aboutStats); } catch { setError('About Stats JSON is invalid'); setSaving(false); return; }
+      try { heroStatsArr = JSON.parse(form.heroStats); } catch { setError('Hero Stats JSON is invalid'); setSaving(false); return; }
 
       const payload = {
         name: form.name, title: form.title, intro: form.intro,
@@ -50,8 +53,9 @@ const AdminProfile = () => {
         siteTitle: form.siteTitle, siteDescription: form.siteDescription,
         about: {
           paragraphs: form.aboutParagraphs.split('\n\n').map(s => s.trim()).filter(Boolean),
-          stats: statsArr,
+          stats: aboutStatsArr,
         },
+        heroStats: heroStatsArr,
         socialLinks: {
           github: form.github, linkedin: form.linkedin, leetcode: form.leetcode,
           geeksforgeeks: form.geeksforgeeks, codeforces: form.codeforces, codechef: form.codechef,
@@ -132,6 +136,55 @@ const AdminProfile = () => {
               <F k="title" label="Professional Title *" />
             </div>
             <F k="intro" label="Hero Introduction" textarea rows={4} />
+
+            {/* Hero Stats */}
+            <div>
+              <label className="block text-sm text-gray-400 mb-2">Hero Stats</label>
+              <div className="space-y-2 mb-2">
+                {(JSON.parse(form.heroStats || '[]')).map((stat, i) => (
+                  <div key={i} className="flex gap-2 items-center">
+                    <input
+                      value={stat.value}
+                      onChange={e => {
+                        const arr = JSON.parse(form.heroStats);
+                        arr[i].value = e.target.value;
+                        setForm(p => ({ ...p, heroStats: JSON.stringify(arr) }));
+                      }}
+                      placeholder="Value (e.g. 1200+)"
+                      className="w-32 bg-gray-800 border border-gray-700 text-white px-3 py-2 rounded text-sm focus:outline-none focus:border-blue-500"
+                    />
+                    <input
+                      value={stat.label}
+                      onChange={e => {
+                        const arr = JSON.parse(form.heroStats);
+                        arr[i].label = e.target.value;
+                        setForm(p => ({ ...p, heroStats: JSON.stringify(arr) }));
+                      }}
+                      placeholder="Label (e.g. DSA Problems Solved)"
+                      className="flex-1 bg-gray-800 border border-gray-700 text-white px-3 py-2 rounded text-sm focus:outline-none focus:border-blue-500"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const arr = JSON.parse(form.heroStats);
+                        arr.splice(i, 1);
+                        setForm(p => ({ ...p, heroStats: JSON.stringify(arr) }));
+                      }}
+                      className="text-red-400 hover:text-red-300 px-2 text-lg leading-none"
+                    >×</button>
+                  </div>
+                ))}
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  const arr = JSON.parse(form.heroStats || '[]');
+                  arr.push({ value: '', label: '' });
+                  setForm(p => ({ ...p, heroStats: JSON.stringify(arr) }));
+                }}
+                className="text-sm text-blue-400 hover:text-blue-300"
+              >+ Add Stat</button>
+            </div>
           </div>
         </div>
 
@@ -140,7 +193,55 @@ const AdminProfile = () => {
           <h2 className="font-semibold text-white mb-4">About Me</h2>
           <div className="space-y-4">
             <F k="aboutParagraphs" label="About Paragraphs (separate with blank line)" textarea rows={10} placeholder="Paragraph 1&#10;&#10;Paragraph 2&#10;&#10;Paragraph 3" />
-            <F k="stats" label='Stats (JSON array: [{"label":"...","value":"..."}])' textarea rows={8} />
+
+            {/* About Stats */}
+            <div>
+              <label className="block text-sm text-gray-400 mb-2">About Stats</label>
+              <div className="space-y-2 mb-2">
+                {(JSON.parse(form.aboutStats || '[]')).map((stat, i) => (
+                  <div key={i} className="flex gap-2 items-center">
+                    <input
+                      value={stat.value}
+                      onChange={e => {
+                        const arr = JSON.parse(form.aboutStats);
+                        arr[i].value = e.target.value;
+                        setForm(p => ({ ...p, aboutStats: JSON.stringify(arr) }));
+                      }}
+                      placeholder="Value (e.g. 1200+)"
+                      className="w-32 bg-gray-800 border border-gray-700 text-white px-3 py-2 rounded text-sm focus:outline-none focus:border-blue-500"
+                    />
+                    <input
+                      value={stat.label}
+                      onChange={e => {
+                        const arr = JSON.parse(form.aboutStats);
+                        arr[i].label = e.target.value;
+                        setForm(p => ({ ...p, aboutStats: JSON.stringify(arr) }));
+                      }}
+                      placeholder="Label (e.g. DSA Problems Solved)"
+                      className="flex-1 bg-gray-800 border border-gray-700 text-white px-3 py-2 rounded text-sm focus:outline-none focus:border-blue-500"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const arr = JSON.parse(form.aboutStats);
+                        arr.splice(i, 1);
+                        setForm(p => ({ ...p, aboutStats: JSON.stringify(arr) }));
+                      }}
+                      className="text-red-400 hover:text-red-300 px-2 text-lg leading-none"
+                    >×</button>
+                  </div>
+                ))}
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  const arr = JSON.parse(form.aboutStats || '[]');
+                  arr.push({ value: '', label: '' });
+                  setForm(p => ({ ...p, aboutStats: JSON.stringify(arr) }));
+                }}
+                className="text-sm text-blue-400 hover:text-blue-300"
+              >+ Add Stat</button>
+            </div>
           </div>
         </div>
 

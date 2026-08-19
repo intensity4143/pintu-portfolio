@@ -8,6 +8,7 @@ const profileSchema = new mongoose.Schema({
     paragraphs: [String],
     stats: [{ label: String, value: String }],
   },
+  heroStats: [{ label: String, value: String }],
   profileImage: { type: String },
   profileImagePublicId: { type: String },
   email: { type: String },

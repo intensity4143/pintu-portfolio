@@ -18,7 +18,6 @@ const Hero = () => {
 
   const refText  = useFadeUp(0);
   const refImg   = useFadeUp(100);
-  const refStats = useFadeUp(200);
 
   useEffect(() => {
     api.get('/api/profile').then(r => setProfile(r.data)).catch(() => {});
@@ -33,7 +32,7 @@ const Hero = () => {
 
   return (
     <section id="home" className="min-h-screen flex flex-col justify-center pt-16">
-      <div className="max-w-5xl mx-auto px-6 w-full py-20 md:py-28">
+      <div className="max-w-5xl mx-auto px-6 w-full pt-10 pb-16 md:pt-12 md:pb-20">
 
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-12 md:gap-8">
 
@@ -105,22 +104,19 @@ const Hero = () => {
         </div>
 
         {/* Stats row */}
-        <div ref={refStats} className="fade-up mt-16 pt-8 border-t border-border flex flex-wrap gap-x-10 gap-y-6">
-          <div>
-            <p className="text-2xl font-semibold text-text-primary" style={{ letterSpacing: '-0.02em' }}>1,200+</p>
-            <p className="text-xs text-text-muted mt-1 font-mono tracking-wide">DSA Problems Solved</p>
+        {profile?.heroStats?.length > 0 && (
+          <div className="mt-16 pt-8 border-t border-border flex flex-wrap gap-x-10 gap-y-6">
+            {profile.heroStats.map((stat, i) => (
+              <>
+                {i > 0 && <div key={`div-${i}`} className="w-px bg-border self-stretch hidden sm:block" />}
+                <div key={i}>
+                  <p className={`text-2xl font-semibold ${i === 0 ? 'text-accent' : 'text-text-primary'}`} style={{ letterSpacing: '-0.02em' }}>{stat.value}</p>
+                  <p className="text-xs text-text-muted mt-1 font-mono tracking-wide">{stat.label}</p>
+                </div>
+              </>
+            ))}
           </div>
-          <div className="w-px bg-border self-stretch hidden sm:block" />
-          <div>
-            <p className="text-2xl font-semibold text-text-primary" style={{ letterSpacing: '-0.02em' }}>1812</p>
-            <p className="text-xs text-text-muted mt-1 font-mono tracking-wide">Peak LeetCode Rating</p>
-          </div>
-          <div className="w-px bg-border self-stretch hidden sm:block" />
-          <div>
-            <p className="text-2xl font-semibold text-accent" style={{ letterSpacing: '-0.02em' }}>MERN</p>
-            <p className="text-xs text-text-muted mt-1 font-mono tracking-wide">Backend-Focused Stack</p>
-          </div>
-        </div>
+        )}
 
       </div>
     </section>
