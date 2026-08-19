@@ -1,78 +1,97 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { FiDownload, FiMenu, FiX } from 'react-icons/fi';
+import { FiMenu, FiX, FiDownload } from 'react-icons/fi';
 import api from '../api/axios';
+
+const NAV_ITEMS = [
+  { label: 'About', href: '#about' },
+  { label: 'Projects', href: '#projects' },
+  { label: 'Experience', href: '#experience' },
+  { label: 'Skills', href: '#skills' },
+  { label: 'Contact', href: '#contact' },
+];
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const [resumeUrl, setResumeUrl] = useState('/Pintu_Kumar_Resume.pdf');
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   useEffect(() => {
     api.get('/api/resume').then(r => { if (r.data.resumeUrl) setResumeUrl(r.data.resumeUrl); }).catch(() => {});
   }, []);
 
-  const menuItems = [
-    { name: 'Home', href: '#home' },
-    { name: 'About', href: '#about' },
-    { name: 'Skills', href: '#skills' },
-    { name: 'Projects', href: '#projects' },
-    { name: 'Achievements', href: '#achievements' },
-    { name: 'Contact', href: '#contact' },
-  ];
+  const close = () => setOpen(false);
 
   return (
-    <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-dark/95 backdrop-blur-lg shadow-lg' : 'bg-dark md:bg-transparent'}`}
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled ? 'bg-surface/95 backdrop-blur-sm border-b border-border' : 'bg-transparent'
+      }`}
     >
-      <div className="max-w-7xl mx-auto px-6 py-4">
-        <div className="flex items-center justify-between">
-          <a href="#home" className="text-2xl font-bold text-white hover:text-primary transition-colors">
-            Pintu Kumar
-          </a>
+      <nav className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+        <a href="#home" className="text-sm font-semibold text-text-primary tracking-tight hover:text-accent transition-colors">
+          Pintu Kumar
+        </a>
 
-          <div className="hidden md:flex items-center space-x-8">
-            {menuItems.map((item) => (
-              <a key={item.name} href={item.href} className="text-gray-300 hover:text-primary transition-colors font-medium">
-                {item.name}
-              </a>
-            ))}
-            <a href={resumeUrl} download target="_blank" rel="noopener noreferrer" className="btn-primary flex items-center gap-2">
-              <FiDownload /> Download Resume
+        {/* Desktop */}
+        <div className="hidden md:flex items-center gap-8">
+          {NAV_ITEMS.map(item => (
+            <a key={item.label} href={item.href} className="nav-link">
+              {item.label}
             </a>
-          </div>
-
-          <button className="md:hidden text-white text-2xl" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-            {mobileMenuOpen ? <FiX /> : <FiMenu />}
-          </button>
+          ))}
+          <a
+            href={resumeUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            download
+            className="btn-ghost text-xs flex items-center gap-1.5 py-2 px-4"
+          >
+            <FiDownload size={13} /> Resume
+          </a>
         </div>
 
-        {mobileMenuOpen && (
-          <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="md:hidden mt-4 pb-4 space-y-4">
-            {menuItems.map((item) => (
-              <a key={item.name} href={item.href} onClick={() => setMobileMenuOpen(false)}
-                className="block text-gray-300 hover:text-primary transition-colors font-medium">
-                {item.name}
-              </a>
-            ))}
-            <a href={resumeUrl} download target="_blank" rel="noopener noreferrer"
-              onClick={() => setMobileMenuOpen(false)}
-              className="btn-primary flex items-center gap-2 w-full justify-center">
-              <FiDownload /> Download Resume
+        {/* Mobile toggle */}
+        <button
+          className="md:hidden text-text-secondary hover:text-text-primary transition-colors p-1"
+          onClick={() => setOpen(v => !v)}
+          aria-label="Toggle menu"
+        >
+          {open ? <FiX size={20} /> : <FiMenu size={20} />}
+        </button>
+      </nav>
+
+      {/* Mobile drawer */}
+      {open && (
+        <div className="md:hidden bg-surface border-b border-border px-6 pb-6 pt-2 space-y-4">
+          {NAV_ITEMS.map(item => (
+            <a
+              key={item.label}
+              href={item.href}
+              onClick={close}
+              className="block text-sm text-text-secondary hover:text-text-primary transition-colors py-1"
+            >
+              {item.label}
             </a>
-          </motion.div>
-        )}
-      </div>
-    </motion.nav>
+          ))}
+          <a
+            href={resumeUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            download
+            onClick={close}
+            className="btn-ghost text-xs inline-flex items-center gap-1.5 py-2 px-4"
+          >
+            <FiDownload size={13} /> Resume
+          </a>
+        </div>
+      )}
+    </header>
   );
 };
 

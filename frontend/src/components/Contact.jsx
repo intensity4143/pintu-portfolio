@@ -1,140 +1,132 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { FiMail, FiGithub, FiLinkedin, FiSend } from 'react-icons/fi';
-import { SiLeetcode } from 'react-icons/si';
+import { FiMail, FiGithub, FiLinkedin, FiArrowUpRight } from 'react-icons/fi';
+import { SiLeetcode, SiCodeforces } from 'react-icons/si';
 import api from '../api/axios';
+
+const LINKS_MAP = [
+  { key: 'email', Icon: FiMail, label: 'Email' },
+  { key: 'github', Icon: FiGithub, label: 'GitHub' },
+  { key: 'linkedin', Icon: FiLinkedin, label: 'LinkedIn' },
+  { key: 'leetcode', Icon: SiLeetcode, label: 'LeetCode' },
+  { key: 'codeforces', Icon: SiCodeforces, label: 'Codeforces' },
+];
 
 const Contact = () => {
   const [profile, setProfile] = useState(null);
-  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
+  const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
-    api.get('/api/profile').then(r => setProfile(r.data)).catch(console.error);
+    api.get('/api/profile').then(r => setProfile(r.data)).catch(() => {});
   }, []);
 
   const email = profile?.email || 'ipintu4143@gmail.com';
   const socialLinks = profile?.socialLinks || {};
 
-  const contactInfo = [
-    { icon: FiMail, title: 'Email', value: email, link: `https://mail.google.com/mail/?view=cm&fs=1&to=${email}` },
-    socialLinks.github && { icon: FiGithub, title: 'GitHub', value: socialLinks.github.replace('https://github.com/', ''), link: socialLinks.github },
-    socialLinks.linkedin && { icon: FiLinkedin, title: 'LinkedIn', value: socialLinks.linkedin.replace('https://linkedin.com/in/', ''), link: socialLinks.linkedin },
-    socialLinks.leetcode && { icon: SiLeetcode, title: 'LeetCode', value: socialLinks.leetcode.replace('https://leetcode.com/', ''), link: socialLinks.leetcode },
-  ].filter(Boolean);
+  const contactLinks = LINKS_MAP.map(item => {
+    if (item.key === 'email') return { ...item, href: `https://mail.google.com/mail/?view=cm&fs=1&to=${email}`, display: email };
+    const url = socialLinks[item.key];
+    if (!url) return null;
+    return { ...item, href: url, display: url.replace(/^https?:\/\/(www\.)?/, '') };
+  }).filter(Boolean);
 
-  const validateForm = () => {
-    const newErrors = {};
-    if (!formData.name.trim()) newErrors.name = 'Name is required';
-    if (!formData.email.trim()) newErrors.email = 'Email is required';
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = 'Invalid email format';
-    if (!formData.subject.trim()) newErrors.subject = 'Subject is required';
-    if (!formData.message.trim()) newErrors.message = 'Message is required';
-    else if (formData.message.trim().length < 10) newErrors.message = 'Message must be at least 10 characters';
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+  const validate = () => {
+    const e = {};
+    if (!form.name.trim()) e.name = 'Required';
+    if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = 'Valid email required';
+    if (form.message.trim().length < 10) e.message = 'At least 10 characters';
+    setErrors(e);
+    return Object.keys(e).length === 0;
   };
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
+    setForm(p => ({ ...p, [name]: value }));
+    if (errors[name]) setErrors(p => ({ ...p, [name]: '' }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
-    if (validateForm()) {
-      console.log('Form submitted:', formData);
+    if (validate()) {
       setSubmitted(true);
-      setFormData({ name: '', email: '', subject: '', message: '' });
+      setForm({ name: '', email: '', message: '' });
       setTimeout(() => setSubmitted(false), 5000);
     }
   };
 
   return (
-    <section id="contact" className="bg-dark-secondary/50">
-      <div className="max-w-6xl mx-auto px-3 md:px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <h2 className="section-title text-center mb-12">Get In Touch</h2>
+    <section id="contact" className="border-t border-border">
+      <div className="section-wrap">
+        <p className="section-label">Contact</p>
+        <h2 className="section-heading">Let's connect.</h2>
 
-          <div className="grid md:grid-cols-2 gap-12">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2, duration: 0.6 }}
-            >
-              <h3 className="text-2xl font-bold mb-6">Contact Information</h3>
-              <p className="text-gray-300 mb-8 leading-relaxed">
-                I'm always open to discussing new projects, opportunities, or collaborations. Feel free to reach out through any of the following channels.
-              </p>
+        <div className="grid md:grid-cols-2 gap-12 md:gap-16">
 
-              <div className="space-y-4">
-                {contactInfo.map((info, index) => (
-                  <motion.a
-                    key={index}
-                    href={info.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ x: 5 }}
-                    className="flex items-center gap-4 bg-dark p-4 rounded-xl hover:bg-dark/70 transition-all group"
-                  >
-                    <div className="bg-primary/10 p-3 rounded-lg group-hover:bg-primary/20 transition-colors">
-                      <info.icon className="text-2xl text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-gray-400 text-sm">{info.title}</p>
-                      <p className="text-white font-medium">{info.value}</p>
-                    </div>
-                  </motion.a>
-                ))}
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.4, duration: 0.6 }}
-            >
-              <h3 className="text-2xl font-bold mb-6">Send a Message</h3>
-
-              {submitted && (
-                <div className="bg-green-500/10 border border-green-500 text-green-500 p-4 rounded-lg mb-6">
-                  Message received! You can also reach me directly via email.
-                </div>
-              )}
-
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Your Name" className={errors.name ? 'border-red-500' : ''} />
-                  {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
-                </div>
-                <div>
-                  <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Your Email" className={errors.email ? 'border-red-500' : ''} />
-                  {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
-                </div>
-                <div>
-                  <input type="text" name="subject" value={formData.subject} onChange={handleChange} placeholder="Subject" className={errors.subject ? 'border-red-500' : ''} />
-                  {errors.subject && <p className="text-red-500 text-sm mt-1">{errors.subject}</p>}
-                </div>
-                <div>
-                  <textarea name="message" value={formData.message} onChange={handleChange} placeholder="Your Message" rows="5" className={errors.message ? 'border-red-500' : ''} />
-                  {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message}</p>}
-                </div>
-                <button type="submit" className="btn-primary w-full flex items-center justify-center gap-2">
-                  <FiSend /> Send Message
-                </button>
-              </form>
-            </motion.div>
+          {/* Links */}
+          <div>
+            <p className="text-sm text-text-secondary leading-relaxed mb-8">
+              Open to full-time roles, freelance projects, and interesting collaborations.
+            </p>
+            <div className="space-y-4">
+              {contactLinks.map(({ key, Icon, label, href, display }) => (
+                <a
+                  key={key}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between group border-b border-border pb-4 last:border-b-0"
+                >
+                  <div className="flex items-center gap-3">
+                    <Icon size={15} className="text-text-muted" />
+                    <span className="text-sm text-text-secondary group-hover:text-text-primary transition-colors">{label}</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs text-text-muted font-mono hidden sm:block">{display}</span>
+                    <FiArrowUpRight size={13} className="text-text-muted group-hover:text-accent transition-colors" />
+                  </div>
+                </a>
+              ))}
+            </div>
           </div>
-        </motion.div>
+
+          {/* Form */}
+          <div>
+            {submitted && (
+              <div className="border border-accent/40 bg-accent/5 text-accent text-sm px-4 py-3 mb-6">
+                Message received. I'll get back to you soon.
+              </div>
+            )}
+            <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+              <div>
+                <input
+                  type="text" name="name" value={form.name} onChange={handleChange}
+                  placeholder="Name" className={`form-input ${errors.name ? 'border-red-500/60' : ''}`}
+                />
+                {errors.name && <p className="text-xs text-red-400 mt-1">{errors.name}</p>}
+              </div>
+              <div>
+                <input
+                  type="email" name="email" value={form.email} onChange={handleChange}
+                  placeholder="Email" className={`form-input ${errors.email ? 'border-red-500/60' : ''}`}
+                />
+                {errors.email && <p className="text-xs text-red-400 mt-1">{errors.email}</p>}
+              </div>
+              <div>
+                <textarea
+                  name="message" value={form.message} onChange={handleChange}
+                  placeholder="Message" rows={5}
+                  className={`form-input resize-none ${errors.message ? 'border-red-500/60' : ''}`}
+                />
+                {errors.message && <p className="text-xs text-red-400 mt-1">{errors.message}</p>}
+              </div>
+              <button type="submit" className="btn-primary w-full justify-center">
+                Send Message
+              </button>
+            </form>
+          </div>
+
+        </div>
       </div>
     </section>
   );

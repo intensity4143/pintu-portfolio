@@ -5,10 +5,9 @@ import api from '../api/axios';
 
 const Footer = () => {
   const [profile, setProfile] = useState(null);
-  const currentYear = new Date().getFullYear();
 
   useEffect(() => {
-    api.get('/api/profile').then(r => setProfile(r.data)).catch(console.error);
+    api.get('/api/profile').then(r => setProfile(r.data)).catch(() => {});
   }, []);
 
   const name = profile?.name || 'Pintu Kumar';
@@ -16,29 +15,30 @@ const Footer = () => {
   const socialLinks = profile?.socialLinks || {};
 
   const links = [
-    socialLinks.github && { icon: FiGithub, url: socialLinks.github, name: 'GitHub' },
-    socialLinks.linkedin && { icon: FiLinkedin, url: socialLinks.linkedin, name: 'LinkedIn' },
-    socialLinks.leetcode && { icon: SiLeetcode, url: socialLinks.leetcode, name: 'LeetCode' },
-    { icon: FiMail, url: `https://mail.google.com/mail/?view=cm&fs=1&to=${email}`, name: 'Email' },
+    socialLinks.github && { Icon: FiGithub, href: socialLinks.github, label: 'GitHub' },
+    socialLinks.linkedin && { Icon: FiLinkedin, href: socialLinks.linkedin, label: 'LinkedIn' },
+    socialLinks.leetcode && { Icon: SiLeetcode, href: socialLinks.leetcode, label: 'LeetCode' },
+    { Icon: FiMail, href: `https://mail.google.com/mail/?view=cm&fs=1&to=${email}`, label: 'Email' },
   ].filter(Boolean);
 
   return (
-    <footer className="bg-dark-secondary border-t border-gray-800 py-8">
-      <div className="max-w-7xl mx-auto px-3 md:px-6">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-gray-400 text-sm">© {currentYear} {name}. All rights reserved.</p>
-
-          <div className="flex gap-4">
-            {links.map((social) => (
-              <a key={social.name} href={social.url} target="_blank" rel="noopener noreferrer"
-                className="text-gray-400 hover:text-primary transition-colors" title={social.name}>
-                <social.icon className="text-xl" />
-              </a>
-            ))}
-          </div>
-
-          <p className="text-gray-400 text-sm">Built with React & Tailwind CSS</p>
+    <footer className="border-t border-border">
+      <div className="max-w-5xl mx-auto px-6 py-10 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div>
+          <p className="text-sm font-medium text-text-primary">{name}</p>
+          <p className="text-xs text-text-muted mt-0.5">Full Stack Developer · Backend-Focused</p>
         </div>
+
+        <div className="flex items-center gap-5">
+          {links.map(({ Icon, href, label }) => (
+            <a key={label} href={href} target="_blank" rel="noopener noreferrer"
+              aria-label={label} className="text-text-muted hover:text-text-primary transition-colors">
+              <Icon size={16} />
+            </a>
+          ))}
+        </div>
+
+        <p className="text-xs text-text-muted">© {new Date().getFullYear()} {name}</p>
       </div>
     </footer>
   );
