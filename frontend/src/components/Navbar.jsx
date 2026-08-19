@@ -33,6 +33,22 @@ const Navbar = () => {
 
   const close = () => setOpen(false);
 
+  const downloadResume = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch(resumeUrl);
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'Pintu_Kumar_Resume.pdf';
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch {
+      window.open(resumeUrl, '_blank');
+    }
+  };
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -66,10 +82,8 @@ const Navbar = () => {
           ))}
           <a
             href={resumeUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            download
-            className="btn-ghost text-xs flex items-center gap-1.5 py-2 px-4"
+            onClick={downloadResume}
+            className="btn-ghost text-xs flex items-center gap-1.5 py-2 px-4 cursor-pointer"
           >
             <FiDownload size={13} /> Resume
           </a>
@@ -105,11 +119,8 @@ const Navbar = () => {
           <div className="pt-2">
             <a
               href={resumeUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              download
-              onClick={close}
-              className="btn-ghost text-xs inline-flex items-center gap-1.5 py-2 px-4"
+              onClick={(e) => { downloadResume(e); close(); }}
+              className="btn-ghost text-xs inline-flex items-center gap-1.5 py-2 px-4 cursor-pointer"
             >
               <FiDownload size={13} /> Resume
             </a>
