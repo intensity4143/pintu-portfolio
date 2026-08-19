@@ -2,24 +2,26 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
-import Skills from './components/Skills';
 import Projects from './components/Projects';
+import Experience from './components/Experience';
+import Skills from './components/Skills';
 import Achievements from './components/Achievements';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
-import ScrollProgress from './components/ScrollProgress';
 import AdminApp from './admin/AdminApp';
 
 const Portfolio = () => (
-  <div className="min-h-screen bg-dark text-white">
-    <ScrollProgress />
+  <div className="min-h-screen bg-surface text-text-primary">
     <Navbar />
-    <Hero />
-    <About />
-    <Skills />
-    <Projects />
-    <Achievements />
-    <Contact />
+    <main>
+      <Hero />
+      <About />
+      <Projects />
+      <Experience />
+      <Skills />
+      <Achievements />
+      <Contact />
+    </main>
     <Footer />
   </div>
 );
