@@ -26,6 +26,7 @@ const AdminProfile = () => {
         siteDescription: p.siteDescription || '',
         aboutParagraphs: (p.about?.paragraphs || []).join('\n\n'),
         aboutStats: JSON.stringify(p.about?.stats || [], null, 2),
+        currentFocus: (p.about?.currentFocus || []).join('\n'),
         heroStats: JSON.stringify(p.heroStats || [], null, 2),
         github: p.socialLinks?.github || '',
         linkedin: p.socialLinks?.linkedin || '',
@@ -54,6 +55,7 @@ const AdminProfile = () => {
         about: {
           paragraphs: form.aboutParagraphs.split('\n\n').map(s => s.trim()).filter(Boolean),
           stats: aboutStatsArr,
+          currentFocus: form.currentFocus.split('\n').map(s => s.trim()).filter(Boolean),
         },
         heroStats: heroStatsArr,
         socialLinks: {
@@ -193,55 +195,7 @@ const AdminProfile = () => {
           <h2 className="font-semibold text-white mb-4">About Me</h2>
           <div className="space-y-4">
             <F k="aboutParagraphs" label="About Paragraphs (separate with blank line)" textarea rows={10} placeholder="Paragraph 1&#10;&#10;Paragraph 2&#10;&#10;Paragraph 3" />
-
-            {/* About Stats */}
-            <div>
-              <label className="block text-sm text-gray-400 mb-2">About Stats</label>
-              <div className="space-y-2 mb-2">
-                {(JSON.parse(form.aboutStats || '[]')).map((stat, i) => (
-                  <div key={i} className="flex gap-2 items-center">
-                    <input
-                      value={stat.value}
-                      onChange={e => {
-                        const arr = JSON.parse(form.aboutStats);
-                        arr[i].value = e.target.value;
-                        setForm(p => ({ ...p, aboutStats: JSON.stringify(arr) }));
-                      }}
-                      placeholder="Value (e.g. 1200+)"
-                      className="w-32 bg-gray-800 border border-gray-700 text-white px-3 py-2 rounded text-sm focus:outline-none focus:border-blue-500"
-                    />
-                    <input
-                      value={stat.label}
-                      onChange={e => {
-                        const arr = JSON.parse(form.aboutStats);
-                        arr[i].label = e.target.value;
-                        setForm(p => ({ ...p, aboutStats: JSON.stringify(arr) }));
-                      }}
-                      placeholder="Label (e.g. DSA Problems Solved)"
-                      className="flex-1 bg-gray-800 border border-gray-700 text-white px-3 py-2 rounded text-sm focus:outline-none focus:border-blue-500"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const arr = JSON.parse(form.aboutStats);
-                        arr.splice(i, 1);
-                        setForm(p => ({ ...p, aboutStats: JSON.stringify(arr) }));
-                      }}
-                      className="text-red-400 hover:text-red-300 px-2 text-lg leading-none"
-                    >×</button>
-                  </div>
-                ))}
-              </div>
-              <button
-                type="button"
-                onClick={() => {
-                  const arr = JSON.parse(form.aboutStats || '[]');
-                  arr.push({ value: '', label: '' });
-                  setForm(p => ({ ...p, aboutStats: JSON.stringify(arr) }));
-                }}
-                className="text-sm text-blue-400 hover:text-blue-300"
-              >+ Add Stat</button>
-            </div>
+            <F k="currentFocus" label="Current Focus (one item per line)" textarea rows={6} placeholder="Backend Engineering&#10;API Design & Security&#10;Database Design" />
           </div>
         </div>
 

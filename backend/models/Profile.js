@@ -7,6 +7,7 @@ const profileSchema = new mongoose.Schema({
   about: {
     paragraphs: [String],
     stats: [{ label: String, value: String }],
+    currentFocus: [String],
   },
   heroStats: [{ label: String, value: String }],
   profileImage: { type: String },
