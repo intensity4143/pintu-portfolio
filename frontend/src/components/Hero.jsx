@@ -96,10 +96,22 @@ const Hero = () => {
               </a>
               <a
                 href={resumeUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                download
-                className="btn-ghost"
+                onClick={async (e) => {
+                  e.preventDefault();
+                  try {
+                    const res = await fetch(resumeUrl);
+                    const blob = await res.blob();
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'Pintu_Kumar_Resume.pdf';
+                    a.click();
+                    URL.revokeObjectURL(url);
+                  } catch {
+                    window.open(resumeUrl, '_blank');
+                  }
+                }}
+                className="btn-ghost cursor-pointer"
               >
                 <FiDownload size={14} /> Download Resume
               </a>
