@@ -67,7 +67,7 @@ const ProjectItem = ({ project, index }) => {
 
           {project.highlights?.length > 0 && (
             <ul className="space-y-1.5 mb-5">
-              {project.highlights.slice(0, 4).map((point, i) => (
+              {project.highlights.map((point, i) => (
                 <li key={i} className="text-sm text-text-secondary flex items-start gap-2">
                   <span className="text-accent mt-1.5 flex-shrink-0 leading-none">—</span>
                   <span style={{ lineHeight: '1.6' }}>{point}</span>
