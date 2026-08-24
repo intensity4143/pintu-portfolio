@@ -28,53 +28,43 @@ const AdminMessages = () => {
 
   return (
     <div>
-      <div className="flex items-center gap-3 mb-6">
-        <h1 className="text-2xl font-bold text-white">Messages</h1>
+      <p className="font-mono text-xs text-text-muted tracking-widest uppercase mb-4">Inbox</p>
+      <div className="flex items-center gap-3 mb-10">
+        <h1 className="admin-page-title mb-0">Messages</h1>
         {unread > 0 && (
-          <span className="bg-blue-600 text-white text-xs font-semibold px-2 py-0.5 rounded-full">
-            {unread} new
-          </span>
+          <span className="font-mono text-xs bg-accent text-surface px-2 py-0.5">{unread} new</span>
         )}
       </div>
 
       {loading ? (
-        <p className="text-gray-400 text-sm">Loading...</p>
+        <p className="text-text-muted text-sm">Loading...</p>
       ) : messages.length === 0 ? (
-        <p className="text-gray-400 text-sm">No messages yet.</p>
+        <p className="text-text-muted text-sm border-t border-border pt-8">No messages yet.</p>
       ) : (
         <div className="space-y-4">
           {messages.map(m => (
-            <div
-              key={m._id}
-              className={`bg-gray-900 border rounded-xl p-5 ${m.read ? 'border-gray-800' : 'border-blue-500/50'}`}
-            >
+            <div key={m._id} className={`border p-5 ${m.read ? 'border-border' : 'border-accent/40 bg-accent/5'}`}>
               <div className="flex items-start justify-between gap-4 flex-wrap">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
-                    <p className="font-semibold text-white">{m.name}</p>
-                    {!m.read && <span className="text-xs bg-blue-600/20 text-blue-400 px-2 py-0.5 rounded">Unread</span>}
+                    <p className="font-semibold text-text-primary text-sm">{m.name}</p>
+                    {!m.read && <span className="font-mono text-xs text-accent">unread</span>}
                   </div>
-                  <p className="text-xs text-gray-400">{m.email}</p>
-                  <p className="text-xs text-gray-600 mt-1">{new Date(m.createdAt).toLocaleString()}</p>
+                  <p className="font-mono text-xs text-text-muted">{m.email}</p>
+                  <p className="font-mono text-xs text-text-muted mt-0.5">{new Date(m.createdAt).toLocaleString()}</p>
                 </div>
                 <div className="flex gap-2">
                   {!m.read && (
-                    <button
-                      onClick={() => markRead(m._id)}
-                      className="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-1.5 rounded"
-                    >
+                    <button onClick={() => markRead(m._id)} className="admin-btn-ghost text-xs">
                       Mark Read
                     </button>
                   )}
-                  <button
-                    onClick={() => remove(m._id)}
-                    className="text-xs bg-red-600/20 hover:bg-red-600/40 text-red-400 px-3 py-1.5 rounded"
-                  >
+                  <button onClick={() => remove(m._id)} className="admin-btn-danger text-xs">
                     Delete
                   </button>
                 </div>
               </div>
-              <p className="text-sm text-gray-300 mt-4 whitespace-pre-wrap">{m.message}</p>
+              <p className="text-sm text-text-secondary mt-4 whitespace-pre-wrap leading-relaxed">{m.message}</p>
             </div>
           ))}
         </div>

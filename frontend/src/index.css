@@ -108,3 +108,32 @@
 .nav-link-active {
   color: #F0F0F0 !important;
 }
+
+/* Admin panel shared styles */
+.admin-card {
+  @apply bg-surface-2 border border-border p-6 mb-6;
+}
+.admin-input {
+  @apply w-full bg-surface border border-border text-text-primary px-3 py-2 text-sm focus:outline-none focus:border-accent transition-colors font-sans;
+}
+.admin-textarea {
+  @apply w-full bg-surface border border-border text-text-primary px-3 py-2 text-sm focus:outline-none focus:border-accent transition-colors resize-y font-sans;
+}
+.admin-btn-primary {
+  @apply bg-accent hover:bg-yellow-300 disabled:opacity-50 text-surface px-5 py-2 text-sm font-semibold transition-colors;
+}
+.admin-btn-ghost {
+  @apply border border-border text-text-secondary hover:text-text-primary hover:border-text-muted px-4 py-2 text-sm transition-colors;
+}
+.admin-btn-danger {
+  @apply border border-red-500/30 text-red-400 hover:bg-red-500/10 px-4 py-2 text-sm transition-colors;
+}
+.admin-label {
+  @apply block font-mono text-xs text-text-muted uppercase tracking-wider mb-2;
+}
+.admin-page-title {
+  @apply text-2xl font-semibold text-text-primary mb-10;
+}
+.admin-section-title {
+  @apply font-semibold text-text-primary mb-5;
+}

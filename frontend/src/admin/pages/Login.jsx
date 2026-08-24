@@ -24,38 +24,44 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 flex items-center justify-center p-4">
-      <div className="bg-gray-900 border border-gray-800 rounded-xl p-8 w-full max-w-sm">
-        <h1 className="text-2xl font-bold text-white mb-2">Admin Login</h1>
-        <p className="text-gray-400 text-sm mb-6">Pintu Kumar Portfolio CMS</p>
+    <div className="min-h-screen bg-surface flex items-center justify-center p-4 font-sans">
+      <div className="w-full max-w-sm">
+        <p className="font-mono text-xs text-text-muted tracking-widest uppercase mb-6">Admin Access</p>
+        <h1 className="text-2xl font-semibold text-text-primary mb-8" style={{ letterSpacing: '-0.02em' }}>
+          Pintu Kumar <span className="text-text-muted font-light">/ CMS</span>
+        </h1>
 
-        {error && <div className="bg-red-500/10 border border-red-500 text-red-400 p-3 rounded mb-4 text-sm">{error}</div>}
+        {error && (
+          <div className="border border-red-500/30 bg-red-500/5 text-red-400 px-4 py-3 text-sm mb-6">
+            {error}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm text-gray-400 mb-1">Email</label>
+            <label className="block font-mono text-xs text-text-muted uppercase tracking-wider mb-2">Email</label>
             <input
               type="email"
               value={form.email}
               onChange={e => setForm(p => ({ ...p, email: e.target.value }))}
               required
-              className="w-full bg-gray-800 border border-gray-700 text-white px-3 py-2 rounded focus:outline-none focus:border-blue-500"
+              className="w-full bg-surface-2 border border-border text-text-primary px-4 py-2.5 text-sm focus:outline-none focus:border-accent transition-colors"
             />
           </div>
           <div>
-            <label className="block text-sm text-gray-400 mb-1">Password</label>
+            <label className="block font-mono text-xs text-text-muted uppercase tracking-wider mb-2">Password</label>
             <input
               type="password"
               value={form.password}
               onChange={e => setForm(p => ({ ...p, password: e.target.value }))}
               required
-              className="w-full bg-gray-800 border border-gray-700 text-white px-3 py-2 rounded focus:outline-none focus:border-blue-500"
+              className="w-full bg-surface-2 border border-border text-text-primary px-4 py-2.5 text-sm focus:outline-none focus:border-accent transition-colors"
             />
           </div>
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white py-2 rounded font-medium transition-colors"
+            className="w-full bg-accent hover:bg-yellow-300 disabled:opacity-50 text-surface py-2.5 text-sm font-semibold transition-colors mt-2"
           >
             {loading ? 'Logging in...' : 'Login'}
           </button>
