@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import api from '../../api/axios';
+import { broadcastSync } from '../../hooks/useSync';
 
 const AdminProfile = () => {
   const [profile, setProfile] = useState(null);
@@ -66,6 +67,7 @@ const AdminProfile = () => {
       const r = await api.put('/api/profile', payload);
       setProfile(r.data);
       setSuccess('Profile saved');
+      broadcastSync('profile');
     } catch (err) {
       setError(err.response?.data?.message || 'Save failed');
     } finally {
@@ -82,6 +84,7 @@ const AdminProfile = () => {
       const r = await api.post('/api/profile/image', fd);
       setImagePreview(r.data.profileImage);
       setSuccess('Profile image updated');
+      broadcastSync('profile');
       setImageFile(null);
     } catch (err) {
       setError(err.response?.data?.message || 'Image upload failed');

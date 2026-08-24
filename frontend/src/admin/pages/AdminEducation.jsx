@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import api from '../../api/axios';
+import { broadcastSync } from '../../hooks/useSync';
 
 const emptyForm = { institution: '', degree: '', fieldOfStudy: '', startYear: '', endYear: '', grade: '', description: '', order: 0 };
 
@@ -21,7 +22,7 @@ const AdminEducation = () => {
 
   const handleDelete = async (id) => {
     if (!window.confirm('Delete?')) return;
-    try { await api.delete(`/api/education/${id}`); setSuccess('Deleted'); load(); }
+    try { await api.delete(`/api/education/${id}`); setSuccess('Deleted'); broadcastSync('education'); load(); }
     catch (err) { setError(err.response?.data?.message || 'Delete failed'); }
   };
 
@@ -30,6 +31,7 @@ const AdminEducation = () => {
     try {
       if (editId) { await api.put(`/api/education/${editId}`, form); setSuccess('Updated'); }
       else { await api.post('/api/education', form); setSuccess('Created'); }
+      broadcastSync('education');
       setShowForm(false); load();
     } catch (err) { setError(err.response?.data?.message || 'Save failed'); }
     finally { setSaving(false); }

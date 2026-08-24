@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import api from '../../api/axios';
+import { broadcastSync } from '../../hooks/useSync';
 
 const emptyForm = {
   title: '', description: '', fullDescription: '',
@@ -48,6 +49,7 @@ const AdminProjects = () => {
     try {
       await api.delete(`/api/projects/${id}`);
       setSuccess('Project deleted');
+      broadcastSync('projects');
       load();
     } catch (err) {
       setError(err.response?.data?.message || 'Delete failed');
@@ -84,6 +86,7 @@ const AdminProjects = () => {
         await api.post('/api/projects', fd);
         setSuccess('Project created');
       }
+      broadcastSync('projects');
       setShowForm(false);
       load();
     } catch (err) {

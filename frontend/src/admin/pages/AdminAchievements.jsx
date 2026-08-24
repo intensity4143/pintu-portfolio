@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import api from '../../api/axios';
+import { broadcastSync } from '../../hooks/useSync';
 
 const emptyForm = { title: '', description: '', highlight: '', organization: '', url: '', order: 0 };
 
@@ -26,7 +27,7 @@ const AdminAchievements = () => {
 
   const handleDelete = async (id) => {
     if (!window.confirm('Delete?')) return;
-    try { await api.delete(`/api/achievements/${id}`); setSuccess('Deleted'); load(); }
+    try { await api.delete(`/api/achievements/${id}`); setSuccess('Deleted'); broadcastSync('achievements'); load(); }
     catch (err) { setError(err.response?.data?.message || 'Delete failed'); }
   };
 
@@ -38,6 +39,7 @@ const AdminAchievements = () => {
       if (imageFile) fd.append('image', imageFile);
       if (editId) { await api.put(`/api/achievements/${editId}`, fd); setSuccess('Updated'); }
       else { await api.post('/api/achievements', fd); setSuccess('Created'); }
+      broadcastSync('achievements');
       setShowForm(false); load();
     } catch (err) { setError(err.response?.data?.message || 'Save failed'); }
     finally { setSaving(false); }

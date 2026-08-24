@@ -5,11 +5,14 @@ const Admin = require('../models/Admin');
 
 const loginLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 10 });
 
+const isProd = process.env.NODE_ENV === 'production';
+
 const COOKIE_OPTS = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === 'production',
-  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  secure: isProd,
+  sameSite: isProd ? 'none' : 'lax',
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+  ...(isProd && { domain: undefined }),
 };
 
 router.post('/login', loginLimiter, async (req, res) => {

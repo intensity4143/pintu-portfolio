@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import api from '../api/axios';
 import useFadeUp from '../hooks/useFadeUp';
+import useSync from '../hooks/useSync';
 
 const ExperienceItem = ({ item, index }) => {
   const ref = useFadeUp(index * 80);
@@ -38,9 +39,9 @@ const Experience = () => {
   const [loading, setLoading]       = useState(true);
   const refHead = useFadeUp(0);
 
-  useEffect(() => {
-    api.get('/api/experience').then(r => setExperience(r.data)).catch(() => {}).finally(() => setLoading(false));
-  }, []);
+  const load = () => api.get('/api/experience').then(r => setExperience(r.data)).catch(() => {}).finally(() => setLoading(false));
+  useEffect(() => { load(); }, []);
+  useSync('experience', load);
 
   if (!loading && experience.length === 0) return null;
 

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import api from '../../api/axios';
+import { broadcastSync } from '../../hooks/useSync';
 
 const emptyForm = {
   company: '', position: '', employmentType: '', location: '',
@@ -42,7 +43,7 @@ const AdminExperience = () => {
 
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this experience?')) return;
-    try { await api.delete(`/api/experience/${id}`); setSuccess('Deleted'); load(); }
+    try { await api.delete(`/api/experience/${id}`); setSuccess('Deleted'); broadcastSync('experience'); load(); }
     catch (err) { setError(err.response?.data?.message || 'Delete failed'); }
   };
 
@@ -57,6 +58,7 @@ const AdminExperience = () => {
       };
       if (editId) { await api.put(`/api/experience/${editId}`, payload); setSuccess('Updated'); }
       else { await api.post('/api/experience', payload); setSuccess('Created'); }
+      broadcastSync('experience');
       setShowForm(false); load();
     } catch (err) { setError(err.response?.data?.message || 'Save failed'); }
     finally { setSaving(false); }

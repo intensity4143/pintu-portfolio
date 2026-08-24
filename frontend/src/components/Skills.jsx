@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import api from '../api/axios';
 import useFadeUp from '../hooks/useFadeUp';
+import useSync from '../hooks/useSync';
 
 const CATEGORY_ORDER = ['Languages', 'Frontend', 'Backend', 'Databases', 'Core CS', 'DevOps', 'Tools', 'Other'];
 
@@ -25,9 +26,9 @@ const Skills = () => {
   const [loading, setLoading] = useState(true);
   const refHead = useFadeUp(0);
 
-  useEffect(() => {
-    api.get('/api/skills').then(r => setSkills(r.data)).catch(() => {}).finally(() => setLoading(false));
-  }, []);
+  const load = () => api.get('/api/skills').then(r => setSkills(r.data)).catch(() => {}).finally(() => setLoading(false));
+  useEffect(() => { load(); }, []);
+  useSync('skills', load);
 
   const grouped = CATEGORY_ORDER.reduce((acc, cat) => {
     const catSkills = skills.filter(s => s.category === cat);

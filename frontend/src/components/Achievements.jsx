@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { SiLeetcode, SiGeeksforgeeks, SiCodeforces, SiCodechef } from 'react-icons/si';
 import api from '../api/axios';
 import useFadeUp from '../hooks/useFadeUp';
+import useSync from '../hooks/useSync';
 
 const PLATFORMS = [
   { key: 'leetcode',      Icon: SiLeetcode,      label: 'LeetCode' },
@@ -39,12 +40,14 @@ const Achievements = () => {
   const [loading, setLoading]           = useState(true);
   const refHead = useFadeUp(0);
 
-  useEffect(() => {
+  const load = () =>
     Promise.all([api.get('/api/achievements'), api.get('/api/profile')])
       .then(([a, p]) => { setAchievements(a.data); setProfile(p.data); })
       .catch(() => {})
       .finally(() => setLoading(false));
-  }, []);
+  useEffect(() => { load(); }, []);
+  useSync('achievements', load);
+  useSync('profile', load);
 
   return (
     <section id="achievements" className="border-t border-border">

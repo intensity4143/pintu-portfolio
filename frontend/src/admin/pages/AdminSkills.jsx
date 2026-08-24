@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import api from '../../api/axios';
+import { broadcastSync } from '../../hooks/useSync';
 
 const CATEGORIES = ['Languages', 'Frontend', 'Backend', 'Databases', 'DevOps', 'Tools', 'Core CS', 'Other'];
 const emptyForm = { name: '', category: 'Languages', icon: '', order: 0 };
@@ -29,6 +30,7 @@ const AdminSkills = () => {
     try {
       await api.delete(`/api/skills/${id}`);
       setSuccess('Skill deleted');
+      broadcastSync('skills');
       load();
     } catch (err) {
       setError(err.response?.data?.message || 'Delete failed');
@@ -46,6 +48,7 @@ const AdminSkills = () => {
         await api.post('/api/skills', form);
         setSuccess('Skill added');
       }
+      broadcastSync('skills');
       setShowForm(false);
       load();
     } catch (err) {

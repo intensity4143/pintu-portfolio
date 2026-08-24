@@ -3,6 +3,7 @@ import { FiArrowRight, FiExternalLink, FiGithub, FiLinkedin } from 'react-icons/
 import { SiLeetcode, SiCodeforces } from 'react-icons/si';
 import profileImgFallback from '../assets/profile.jpg';
 import api from '../api/axios';
+import useSync from '../hooks/useSync';
 
 const SOCIAL_MAP = [
   { key: 'github',    Icon: FiGithub,    label: 'GitHub' },
@@ -22,6 +23,11 @@ const Hero = () => {
 
   useEffect(() => {
     setIsTouch(window.matchMedia('(hover: none)').matches);
+    load();
+  }, []);
+  useSync('profile', load);
+
+  function load() {
     Promise.all([api.get('/api/profile'), api.get('/api/resume')])
       .then(([p, r]) => {
         setProfile(p.data);
@@ -29,7 +35,7 @@ const Hero = () => {
       })
       .catch(() => {})
       .finally(() => setLoading(false));
-  }, []);
+  }
 
   const name         = profile?.name         || 'Pintu Kumar';
   const title        = profile?.title        || 'Full Stack Developer · Backend-Focused · MERN Stack';

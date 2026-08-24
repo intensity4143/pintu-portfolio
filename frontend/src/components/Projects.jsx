@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { FiGithub, FiExternalLink } from 'react-icons/fi';
 import api from '../api/axios';
 import useFadeUp from '../hooks/useFadeUp';
+import useSync from '../hooks/useSync';
 
 const ProjectItem = ({ project, index }) => {
   const isEven = index % 2 === 0;
@@ -102,9 +103,9 @@ const Projects = () => {
   const [loading, setLoading]   = useState(true);
   const refHead = useFadeUp(0);
 
-  useEffect(() => {
-    api.get('/api/projects').then(r => setProjects(r.data)).catch(() => {}).finally(() => setLoading(false));
-  }, []);
+  const load = () => api.get('/api/projects').then(r => setProjects(r.data)).catch(() => {}).finally(() => setLoading(false));
+  useEffect(() => { load(); }, []);
+  useSync('projects', load);
 
   return (
     <section id="projects" className="border-t border-border">

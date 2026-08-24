@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react';
 import api from '../api/axios';
+import useSync from '../hooks/useSync';
 
 const About = () => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    api.get('/api/profile')
-      .then(r => setProfile(r.data))
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  }, []);
+
+  const load = () => api.get('/api/profile').then(r => setProfile(r.data)).catch(() => {}).finally(() => setLoading(false));
+  useEffect(() => { load(); }, []);
+  useSync('profile', load);
 
   const paragraphs = profile?.about?.paragraphs || [
     "I'm a Full Stack Developer with a strong foundation in Data Structures & Algorithms. Solving 1,200+ problems has strengthened my problem-solving approach and helped me think systematically about performance, scalability, and clean logic.",
