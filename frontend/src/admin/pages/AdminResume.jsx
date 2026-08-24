@@ -56,9 +56,9 @@ const AdminResume = () => {
         <h2 className="font-semibold text-white mb-3">Current Resume</h2>
         {resumeUrl ? (
           <div className="flex items-center gap-4 flex-wrap">
-            <a href={resumeUrl} target="_blank" rel="noopener noreferrer"
+            <a href={`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/resume/view`} target="_blank" rel="noopener noreferrer"
               className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm">
-              📄 View / Download Resume
+              📄 View Resume
             </a>
             <button onClick={handleDelete} disabled={deleting}
               className="bg-red-600/20 hover:bg-red-600/40 text-red-400 px-4 py-2 rounded text-sm disabled:opacity-50">

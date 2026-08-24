@@ -3,6 +3,25 @@ const auth = require('../middleware/auth');
 const Profile = require('../models/Profile');
 const { uploadResume, deleteFromCloudinary } = require('../utils/cloudinary');
 
+// Public - stream resume inline for viewing
+router.get('/view', async (req, res) => {
+  try {
+    const profile = await Profile.findOne().select('resumeUrl');
+    const url = profile?.resumeUrl;
+    if (!url) return res.status(404).json({ message: 'No resume found' });
+    const https = require('https');
+    const http = require('http');
+    const client = url.startsWith('https') ? https : http;
+    client.get(url, (stream) => {
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', 'inline; filename="resume.pdf"');
+      stream.pipe(res);
+    }).on('error', () => res.status(500).json({ message: 'Failed to fetch resume' }));
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 // Public - get current resume URL
 router.get('/', async (req, res) => {
   try {

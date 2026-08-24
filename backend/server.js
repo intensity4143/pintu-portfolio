@@ -35,6 +35,7 @@ app.use('/api/experience', require('./routes/experience'));
 app.use('/api/education', require('./routes/education'));
 app.use('/api/achievements', require('./routes/achievements'));
 app.use('/api/resume', require('./routes/resume'));
+app.use('/api/messages', require('./routes/messages'));
 
 // Health check
 app.get('/api/health', (_, res) => res.json({ ok: true }));

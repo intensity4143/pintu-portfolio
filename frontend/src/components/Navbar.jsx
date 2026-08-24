@@ -83,7 +83,7 @@ const Navbar = () => {
           <a
             href={resumeUrl}
             onClick={downloadResume}
-            className="btn-ghost text-xs flex items-center gap-1.5 py-2 px-4 cursor-pointer"
+            className="btn-ghost text-xs flex items-center gap-1.5 py-2 px-4 cursor-pointer hover:!text-accent hover:!border-border"
           >
             <FiDownload size={13} /> Resume
           </a>
@@ -120,7 +120,7 @@ const Navbar = () => {
             <a
               href={resumeUrl}
               onClick={(e) => { downloadResume(e); close(); }}
-              className="btn-ghost text-xs inline-flex items-center gap-1.5 py-2 px-4 cursor-pointer"
+              className="btn-ghost text-xs inline-flex items-center gap-1.5 py-2 px-4 cursor-pointer hover:!text-accent hover:!border-border"
             >
               <FiDownload size={13} /> Resume
             </a>

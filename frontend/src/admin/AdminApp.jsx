@@ -11,6 +11,7 @@ import AdminExperience from './pages/AdminExperience';
 import AdminEducation from './pages/AdminEducation';
 import AdminAchievements from './pages/AdminAchievements';
 import AdminResume from './pages/AdminResume';
+import AdminMessages from './pages/AdminMessages';
 import Settings from './pages/Settings';
 
 const AdminApp = () => (
@@ -31,6 +32,7 @@ const AdminApp = () => (
                 <Route path="education" element={<AdminEducation />} />
                 <Route path="achievements" element={<AdminAchievements />} />
                 <Route path="resume" element={<AdminResume />} />
+                <Route path="messages" element={<AdminMessages />} />
                 <Route path="settings" element={<Settings />} />
                 <Route path="*" element={<Navigate to="/admin" replace />} />
               </Routes>

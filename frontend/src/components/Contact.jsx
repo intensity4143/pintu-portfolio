@@ -18,6 +18,8 @@ const Contact = () => {
   const [form,      setForm]      = useState({ name: '', email: '', message: '' });
   const [errors,    setErrors]    = useState({});
   const [submitted, setSubmitted] = useState(false);
+  const [sending,   setSending]   = useState(false);
+  const [sendError, setSendError] = useState('');
 
   const refHead  = useFadeUp(0);
   const refLeft  = useFadeUp(80);
@@ -55,12 +57,20 @@ const Contact = () => {
     if (errors[name]) setErrors(p => ({ ...p, [name]: '' }));
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
-    if (validate()) {
+    if (!validate()) return;
+    setSending(true);
+    setSendError('');
+    try {
+      await api.post('/api/messages', form);
       setSubmitted(true);
       setForm({ name: '', email: '', message: '' });
       setTimeout(() => setSubmitted(false), 5000);
+    } catch {
+      setSendError('Failed to send message. Please try again.');
+    } finally {
+      setSending(false);
     }
   };
 
@@ -124,6 +134,11 @@ const Contact = () => {
                 Message received. I'll get back to you soon.
               </div>
             )}
+            {sendError && (
+              <div className="border border-red-500/40 bg-red-500/5 text-red-400 text-sm px-4 py-3 mb-6">
+                {sendError}
+              </div>
+            )}
             <form onSubmit={handleSubmit} className="space-y-4" noValidate>
               <div>
                 <input
@@ -149,8 +164,8 @@ const Contact = () => {
                 />
                 {errors.message && <p className="text-xs text-red-400 mt-1">{errors.message}</p>}
               </div>
-              <button type="submit" className="btn-primary w-full justify-center">
-                Send Message
+              <button type="submit" disabled={sending} className="btn-primary w-full justify-center disabled:opacity-60">
+                {sending ? 'Sending...' : 'Send Message'}
               </button>
             </form>
           </div>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { FiArrowRight, FiDownload, FiGithub, FiLinkedin } from 'react-icons/fi';
+import { FiArrowRight, FiExternalLink, FiGithub, FiLinkedin } from 'react-icons/fi';
 import { SiLeetcode, SiCodeforces } from 'react-icons/si';
 import profileImgFallback from '../assets/profile.jpg';
 import api from '../api/axios';
@@ -95,25 +95,12 @@ const Hero = () => {
                 View Projects <FiArrowRight size={14} />
               </a>
               <a
-                href={resumeUrl}
-                onClick={async (e) => {
-                  e.preventDefault();
-                  try {
-                    const res = await fetch(resumeUrl);
-                    const blob = await res.blob();
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'Pintu_Kumar_Resume.pdf';
-                    a.click();
-                    URL.revokeObjectURL(url);
-                  } catch {
-                    window.open(resumeUrl, '_blank');
-                  }
-                }}
-                className="btn-ghost cursor-pointer"
+                href={`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/resume/view`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-ghost"
               >
-                <FiDownload size={14} /> Download Resume
+                <FiExternalLink size={14} /> View Resume
               </a>
             </div>
 

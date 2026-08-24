@@ -10,6 +10,7 @@ const links = [
   { to: '/admin/education', label: '🎓 Education' },
   { to: '/admin/achievements', label: '🏆 Achievements' },
   { to: '/admin/resume', label: '📄 Resume' },
+  { to: '/admin/messages', label: '✉️ Messages' },
   { to: '/admin/settings', label: '⚙️ Settings' },
 ];
 
