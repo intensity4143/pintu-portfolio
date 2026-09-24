@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import api from '../../api/axios';
 import { broadcastSync } from '../../hooks/useSync';
 
-const CATEGORIES = ['Languages', 'Frontend', 'Backend', 'Databases', 'DevOps', 'Tools', 'Core CS', 'Other'];
+const CATEGORIES = ['Languages', 'Frontend', 'Backend', 'Databases', 'Tools & Platforms', 'DevOps', 'Tools', 'Core CS', 'Other'];
 const emptyForm = { name: '', category: 'Languages', icon: '', order: 0 };
 
 const AdminSkills = () => {

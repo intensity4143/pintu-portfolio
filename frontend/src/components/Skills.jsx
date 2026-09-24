@@ -3,7 +3,7 @@ import api from '../api/axios';
 import useFadeUp from '../hooks/useFadeUp';
 import useSync from '../hooks/useSync';
 
-const CATEGORY_ORDER = ['Languages', 'Frontend', 'Backend', 'Databases', 'Core CS', 'DevOps', 'Tools', 'Other'];
+const CATEGORY_ORDER = ['Languages', 'Frontend', 'Backend', 'Databases', 'Tools & Platforms', 'Core CS', 'DevOps', 'Tools', 'Other'];
 
 const SkillRow = ({ group, index }) => {
   const ref = useFadeUp(index * 60);
